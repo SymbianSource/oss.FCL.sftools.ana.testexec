@@ -1,0 +1,138 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-22: 
+#		(1) Setup a PPP session between the MN and the PDSN, on the 192.168.200.x network.
+#		(2) Set nistnet to drop 15% of packets
+#		(3) MN will then start UDP session with the server and demonstrate packet loss.
+#		(4) MN will then start TCP session with the server and we get normal echo.
+#		(5) Drop PPP link.
+#		(6) Restart PPP link on the 192.168.220.x network.
+#		(7) Demonstrate that TCP session is lost.
+#
+
+
+#######################################################################################
+#
+# Create an MT on the PDSN and the MN
+#
+#######################################################################################
+runcmd svcid=6 methodid=2 SRC=10.22.1.4:5000.udp DST=192.168.10.11:5000.udp DROPI=0
+runcmd svcid=4 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=192.168.10.11 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+runcmd svcid=5 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=10.22.1.4 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+
+
+#######################################################################################
+#
+# Create a PPP session on the MN and PDSN
+#
+#######################################################################################
+runcmd svcid=11 methodid=3 MADDR=localhost MPORT=4000 CONFIG="nodeflate noaccomp defaultroute noauth 192.168.200.10:192.168.200.20 debug logfile ./ppp.log nodetach"
+runcmd svcid=8 methodid=3 MADDR=localhost MPORT=4000 CONFIG="nodeflate noaccomp noauth 192.168.200.20:192.168.200.10 debug logfile ./ppp.log nodetach"
+
+
+#######################################################################################
+#
+# The PPP session should now be setup. The device can now run it's tests and rendezvous
+# when it is complete.
+#
+#######################################################################################
+rendezvous
+rendezvous
+
+
+#######################################################################################
+#
+# Cleanup the PPP session (MN and PDSN) (hardcode session ID as zero) retrieving all the logs
+#
+#######################################################################################
+runcmd svcid=11 methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=11 methodid=6 SID=0
+
+runcmd svcid=8  methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=8  methodid=6 SID=0
+
+
+#######################################################################################
+#
+# Cleanup mobster -- retrieving the logs (MN and PDSN)
+#
+#######################################################################################
+runcmd svcid=4  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=4  methodid=7 DEVICEID=0
+
+runcmd svcid=5  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=5  methodid=7 DEVICEID=0
+rendezvous
+rendezvous
+
+
+#######################################################################################
+#
+# Create an MT on the PDSN and the MN
+#
+#######################################################################################
+runcmd svcid=4 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=192.168.10.11 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+runcmd svcid=5 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=10.22.1.4 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+
+
+#######################################################################################
+#
+# Create a PPP session on the MN and PDSN
+#
+#######################################################################################
+runcmd svcid=11 methodid=3 MADDR=localhost MPORT=4000 CONFIG="nodeflate noaccomp defaultroute noauth 192.168.220.10:192.168.220.20 debug logfile ./ppp.log nodetach"
+runcmd svcid=8 methodid=3 MADDR=localhost MPORT=4000 CONFIG="nodeflate noaccomp noauth 192.168.220.20:192.168.220.10 debug logfile ./ppp.log nodetach"
+rendezvous
+rendezvous
+
+
+#######################################################################################
+#
+# Cleanup the PPP session (MN and PDSN) (hardcode session ID as zero) retrieving all the logs
+#
+#######################################################################################
+runcmd svcid=11 methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=11 methodid=6 SID=0
+
+runcmd svcid=8  methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=8  methodid=6 SID=0
+
+
+#######################################################################################
+#
+# Cleanup mobster -- retrieving the logs (MN and PDSN)
+#
+#######################################################################################
+runcmd svcid=4  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=4  methodid=7 DEVICEID=0
+
+runcmd svcid=5  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=5  methodid=7 DEVICEID=0
+
+
+#######################################################################################
+#
+# We should be back to our original state now -- quit
+#
+#######################################################################################
+rendezvous

@@ -1,0 +1,90 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-23: Setup a PPP session between SymbianOS and the PDSN
+#
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=0
+
+#######################################################################################
+#
+# Create an MT on the PDSN and the MN
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR="localhost" CHANNEL_PORT=4000 AIR_OUTADDR="192.168.10.11" AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=2 FILTERCONFIG=1
+runcmd svcid=5 svchost="penpdsn"	methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR="localhost" CHANNEL_PORT=4000 AIR_OUTADDR="10.22.1.6" AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=2 FILTERCONFIG=1
+runcmd svcid=5 svchost="penmn"		methodid=4 DEVICEID=0
+runcmd svcid=5 svchost="penpdsn"	methodid=4 DEVICEID=0
+
+
+#######################################################################################
+#
+# Create a PPP session on the PDSN
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	methodid=3 MADDR="localhost" MPORT=4000 CONFIG="nodeflate noaccomp noauth 192.168.200.20:192.168.200.10 debug logfile ./ppp.log nodetach"
+
+
+#######################################################################################
+#
+# The PPP session should now be setup. Rendezvous with the driver so we know he has
+# started. Then wait for 1 minute (let them play) and then set nistnet to drop 
+# 20 percent, then 80 percent, then 100 percent. The connection should timeout on
+# the symbian device.
+#
+#######################################################################################
+rendezvous
+rendezvous
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=10
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=2000
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=20
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=2000
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=40
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=2000
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=80
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=2000
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="10.22.1.6:5000.udp" DST="192.168.10.11:5000.udp" DROPI=99
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=2000
+rendezvous
+rendezvous
+
+
+#######################################################################################
+#
+# Cleanup the PPP session (MN and PDSN) (hardcode session ID as zero) retrieving all the logs
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	methodid=4 SID=0
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penpdsn"	methodid=6 SID=0
+
+
+#######################################################################################
+#
+# Cleanup mobster -- retrieving the logs (MN and PDSN)
+#
+#######################################################################################
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=0
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=0
+runcmd svcid=5  svchost="penmn"		methodid=6 DEVICEID=0
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penmn"		methodid=7 DEVICEID=0
+
+
+#######################################################################################
+#
+# We should be back to our original state now -- quit
+#
+#######################################################################################
+rendezvous

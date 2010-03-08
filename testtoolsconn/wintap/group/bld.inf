@@ -1,0 +1,52 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+
+PRJ_PLATFORMS
+WINSCW
+
+PRJ_EXPORTS
+../driver/wintap-config.doc             /epoc32/engineeringtools/driver/wintap-config.doc
+../driver/license.txt	                /epoc32/engineeringtools/driver/license.txt
+../driver/OemWin2k.inf			/epoc32/engineeringtools/driver/OemWin2k.inf
+../driver/tap0801.sys			/epoc32/engineeringtools/driver/tap0801.sys
+../driver/tap0901.inf			/epoc32/engineeringtools/driver/tap0901.inf
+../driver/tap0901.sys			/epoc32/engineeringtools/driver/tap0901.sys
+../driver/tap0901.cat			/epoc32/engineeringtools/driver/tap0901.cat
+../driver/tapinstaller.exe		/epoc32/engineeringtools/driver/tapinstaller.exe
+../driver/x64driver/tap0901.inf			/epoc32/engineeringtools/driver/x64driver/tap0901.inf
+../driver/x64driver/tap0901.sys			/epoc32/engineeringtools/driver/x64driver/tap0901.sys
+../driver/x64driver/tap0901.cat			/epoc32/engineeringtools/driver/x64driver/tap0901.cat
+../driver/x64driver/tapinstaller.x64.exe	/epoc32/engineeringtools/driver/x64driver/tapinstaller.x64.exe
+../driver/wintap.configure.nsh		/epoc32/engineeringtools/driver/wintap.configure.nsh
+../driver/wintap.uninstaller.nsh	/epoc32/engineeringtools/driver/wintap.uninstaller.nsh
+
+#if defined(WINS)||defined(WINSCW)
+
+#ifdef INSTALLER
+
+PRJ_MMPFILES
+wintaplibinst.mmp
+ethertap.mmp
+
+#else
+
+PRJ_MMPFILES
+wintaplib.mmp
+ethertap.mmp
+
+#endif
+
+#endif

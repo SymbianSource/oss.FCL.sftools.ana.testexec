@@ -1,0 +1,41 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+
+PRINT UCC Tests - Synchronised test cases - TCP
+
+LOAD_SUITE UCCControlTE
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StartService
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\TestdriverService.ini StartService
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\TestdriverService.ini BuildRun
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StartSyncTestCase
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini RetrieveSyncTestCaseResult
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StartSyncTestCase
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini RetrieveSyncTestCaseResult
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StartSyncTestCase
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini RetrieveSyncTestCaseResult
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StartSyncTestCase
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini RetrieveSyncTestCaseResult
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\TestdriverService.ini RetrieveExecutionResult
+
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\TestdriverService.ini StopService
+RUN_TEST_STEP -1 UCCControlTE RunCommand c:\UCC\SyncService.ini StopService

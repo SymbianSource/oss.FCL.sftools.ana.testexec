@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool name="UCC" 
+	description="Use Case Controller"  
+	version="2.1.2001" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="TDF_v1.1.xsd">
+  <properties>
+    <property name="toolType" type="toolLogic" value="console"></property>
+    <property name="Path" type="toolLogic" value="$INSTDIR\ucc\bin"></property>
+    <property name="dirRemove" type="uninstall" value="$INSTDIR\ucc"/>
+  </properties>
+  <templates>
+    <template type="nsis" operation="configure" name="\epoc32\engineeringtools\ucc\ucc.configure.nsh">
+    </template>
+  </templates>
+  <files>
+    <file source="\epoc32\engineeringtools\ucc\docs\sgl.gt0248.135_ucc_user_guide.doc" target="$INSTDIR\ucc\docs"/>
+    <file source="\epoc32\rom\include\ucc.iby" target="$EPOCROOT\epoc32\rom\include"/>
+    <file source="\epoc32\engineeringtools\ucc\bin\ucc.exe" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\bin\ucc.ini" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\genericservice\lib\genericservice.lib" target="$INSTDIR\ucc\genericservice\lib"/>
+    <file source="\epoc32\engineeringtools\ucc\genericservice\inc\ccall.h" target="$INSTDIR\ucc\genericservice\inc"/>
+    <file source="\epoc32\engineeringtools\ucc\genericservice\inc\cservice.h" target="$INSTDIR\ucc\genericservice\inc"/>
+    <file source="\epoc32\engineeringtools\ucc\genericservice\inc\genericstub.h" target="$INSTDIR\ucc\genericservice\inc"/>    
+    <file source="\epoc32\engineeringtools\ucc\syncservice\bin\syncservice.exe" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\bin\syncservice.ini" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\interface\device\syncservice.ini" target="$INSTDIR\ucc\syncservice\interface\device"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\interface\host\syncserviceinterface.ini" target="$INSTDIR\ucc\syncservice\interface\host"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\testscripts\master\master.script" target="$INSTDIR\ucc\syncservice\testscripts\master"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\testscripts\master\syncservice.ini" target="$INSTDIR\ucc\syncservice\testscripts\master"/>
+    <file source="\epoc32\engineeringtools\ucc\testdriverservice\bin\testdriverservice.exe" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\testdriverservice\bin\testdriverservice.ini" target="$INSTDIR\ucc\bin"/>
+    <file source="\epoc32\engineeringtools\ucc\testdriverservice\interface\device\testdriverservice.ini" target="$INSTDIR\ucc\testdriverservice\interface\device"/>
+    <file source="\epoc32\engineeringtools\ucc\testdriverservice\interface\host\testdriverserviceinterface.ini" target="$INSTDIR\ucc\testdriverservice\interface\host"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\testscripts\slave\slave.script" target="$INSTDIR\ucc\syncservice\testscripts\slave"/>
+    <file source="\epoc32\engineeringtools\ucc\syncservice\testscripts\slave\sampletest.ini" target="$INSTDIR\ucc\syncservice\testscripts\slave"/>
+    <file source="\epoc32\engineeringtools\ucc\remoteinterface\lib\remoteinterface.lib" target="$INSTDIR\ucc\remoteinterface\lib"/>
+    <file source="\epoc32\engineeringtools\ucc\remoteinterface\inc\cremoteinterface.h" target="$INSTDIR\ucc\remoteinterface\inc"/>
+    <file source="\epoc32\engineeringtools\ucc\remoteinterface\inc\mucctransport.h" target="$INSTDIR\ucc\remoteinterface\inc"/>
+    <file source="\epoc32\include\networkemulator\cnetworkemulatorsetupcommdb.h" target="$EPOCROOT\epoc32\include\networkemulator"/>
+    <file source="\epoc32\include\networkemulator\cuccsdevicecontrol.h" target="$EPOCROOT\epoc32\include\networkemulator"/>
+    <file source="\epoc32\include\networkemulator\networkemulatorcontrol.h" target="$EPOCROOT\epoc32\include\networkemulator"/>
+    <file source="\epoc32\include\networkemulator\uccs_errorcodes.h" target="$EPOCROOT\epoc32\include\networkemulator"/>
+    <file source="\epoc32\release\winscw\udeb\networkemulatorcontrol.lib" target="$EPOCROOT\epoc32\release\winscw\udeb"/>
+    <file source="\epoc32\release\winscw\udeb\networkemulatorcontrol.dll" target="$EPOCROOT\epoc32\release\winscw\udeb"/>
+    <file source="\epoc32\release\winscw\udeb\ucccontrolte.exe" target="$EPOCROOT\epoc32\release\winscw\udeb"/>
+    <file source="\epoc32\release\winscw\urel\networkemulatorcontrol.dll" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\winscw\urel\networkemulatorcontrol.dll.map" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\winscw\urel\ucccontrolte.exe" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\winscw\urel\ucccontrolte.exe.map" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\armv5\lib\networkemulatorcontrol.dso" target="$EPOCROOT\epoc32\release\armv5\lib"/>
+    <file source="\epoc32\release\armv5\lib\networkemulatorcontrol.lib" target="$EPOCROOT\epoc32\release\armv5\lib"/>
+    <file source="\epoc32\release\armv5\lib\networkemulatorcontrol{000a0000}.dso" target="$EPOCROOT\epoc32\release\armv5\lib"/>
+    <file source="\epoc32\release\armv5\lib\networkemulatorcontrol{000a0000}.lib" target="$EPOCROOT\epoc32\release\armv5\lib"/>
+    <file source="\epoc32\release\armv5\udeb\networkemulatorcontrol.dll" target="$EPOCROOT\epoc32\release\armv5\udeb"/>
+    <file source="\epoc32\release\armv5\udeb\networkemulatorcontrol.dll.map" target="$EPOCROOT\epoc32\release\armv5\udeb"/>
+    <file source="\epoc32\release\armv5\udeb\ucccontrolte.exe" target="$EPOCROOT\epoc32\release\armv5\udeb"/>
+    <file source="\epoc32\release\armv5\udeb\ucccontrolte.exe.map" target="$EPOCROOT\epoc32\release\armv5\udeb"/>
+    <file source="\epoc32\release\armv5\urel\networkemulatorcontrol.dll" target="$EPOCROOT\epoc32\release\armv5\urel"/>
+    <file source="\epoc32\release\armv5\urel\networkemulatorcontrol.dll.map" target="$EPOCROOT\epoc32\release\armv5\urel"/>
+    <file source="\epoc32\release\armv5\urel\ucccontrolte.exe" target="$EPOCROOT\epoc32\release\armv5\urel"/>
+    <file source="\epoc32\release\armv5\urel\ucccontrolte.exe.map" target="$EPOCROOT\epoc32\release\armv5\urel"/>
+  </files>
+  <dependencies>
+    <dependency name="ONCRPC"/>
+    <dependency name="STATDesktop"/>
+  </dependencies>
+</tool>

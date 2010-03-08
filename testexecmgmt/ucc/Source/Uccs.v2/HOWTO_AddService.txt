@@ -1,0 +1,22 @@
+
+ -- Adding Services to the UCCS --
+
+1.	The rest assumes you have written some client class for the service. This client can have
+	any arbitrary interface.
+	
+2.	Create a subdirectory and put all your service files in there.
+
+3.	Add the rpcgen files, etc.
+
+4.	Check that everything compiles and that you don't need to add libraries, include paths, etc.
+
+5.	Create a new object to be the service interface object. This must inherit and implement
+	the IService interface.
+	
+6.	Implement this class -- use existing classes as a guide.
+
+7.	Add a new RPC Service ID.
+
+8.	Add to the service table.
+
+9.	Add startup / shutdown code to the service manager for this service. 

@@ -1,0 +1,36 @@
+<!ELEMENT CommandLineTest (name,commandLine,logFile?,timeout,dependencies?)>
+<!ELEMENT name (#PCDATA)>
+<!-- Name for your test. -->
+<!ELEMENT commandLine (#PCDATA)>
+<!-- Command to be executed  on the device. [As it appears on the command line]  -->
+
+<!ELEMENT logFile (#PCDATA)>
+<!-- Optional tag, specify a log file to be retrieved after the test has run -->
+<!ELEMENT timeout (#PCDATA)>
+<!--Timeout (seconds) for the test -->
+<!-- Dependencies -->
+<!--  Any test dependencies must go here.  Option of four different types. All are optional. -->
+<!ELEMENT dependencies (data*,build*,delete*,retrieve*)>
+<!-- DATA -->
+<!-- Any data file needed by the test to be copied to the device during run time. -->
+<!ELEMENT data (hostPath,devicePath+)>
+<!ELEMENT data.hostPath (#PCDATA)>
+<!ELEMENT data.devicePath (#PCDATA)>
+<!-- BUILDABLE -->
+<!-- Any binary file needed by the test to be copied to the device during run time. -->
+<!ELEMENT build (hostPath,devicePath+,mmpFile,bldInfPath)>
+<!ATTLIST build type CDATA "test">
+<!ELEMENT build.hostPath (#PCDATA)>
+<!ELEMENT build.devicePath (#PCDATA)>
+<!ELEMENT build.mmpFile (#PCDATA)>
+<!ELEMENT build.bldInfPath (#PCDATA)>
+<!-- DELETABLE -->
+<!-- Any file to be deleted from the device after the test has run. -->
+<!ELEMENT delete (devicePath)>
+<!ELEMENT delete.devicePath (#PCDATA)>
+<!-- RETRIEVABLE -->
+<!-- Any file to be retrieved and deleted from the device after the test has run. -->
+<!ELEMENT retrieve (devicePath,hostPath)>
+<!ATTLIST retrieve timeStamp (yes|no) "no">
+<!ELEMENT retrieve.devicePath (#PCDATA)>
+<!ELEMENT retrieve.hostPath (#PCDATA)>

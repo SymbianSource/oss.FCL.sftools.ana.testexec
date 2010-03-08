@@ -1,0 +1,60 @@
+12:07:01:169 <html><body><pre>
+12:07:01:172 *** TestExecute Started 04/05/2005 12:07:01:172 ***
+12:07:01:199 z:\sampletest\slave.script PRINT UCC SyncService Test (Slave)
+12:07:01:202 INFO -  114 Scriptengine.cpp 855  UCC SyncService Test (Slave)
+
+12:07:01:210 z:\sampletest\slave.script LOAD_SUITE SampleServer
+12:07:01:248 z:\sampletest\slave.script LOAD_SUITE TEF_Bluetooth_Server  -SharedData
+12:07:01:288 z:\sampletest\slave.script START_SYNCHRONISED_TESTCASE TestOne
+12:07:01:296 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 6 Command = START_SYNCHRONISED_TESTCASE TestOne  </font>
+12:07:25:336 z:\sampletest\slave.script PRINT TestOne Sycnhronsised Test block
+12:07:25:431 INFO -  114 Scriptengine.cpp 855  TestOne Sycnhronsised Test block
+
+12:07:25:674 z:\sampletest\slave.script END_SYNCHRONISED_TESTCASE TestOne
+12:07:25:727 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 8 Command = END_SYNCHRONISED_TESTCASE TestOne ***TestCaseResult = PASS </font>
+12:07:25:828 z:\sampletest\slave.script START_SYNCHRONISED_TESTCASE TestTwo
+12:07:25:993 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 10 Command = START_SYNCHRONISED_TESTCASE TestTwo  </font>
+12:07:38:178 z:\sampletest\slave.script PRINT TestTwo Sycnhronsised Test block
+12:07:38:181 INFO -  114 Scriptengine.cpp 855  TestTwo Sycnhronsised Test block
+
+12:07:38:191 z:\sampletest\slave.script RUN_TEST_STEP 100 TEF_Bluetooth_Server AcceptBT 
+12:07:38:220 INFO -  124 Testbluetooth.cpp 76 Connecting to Socket Server..
+12:07:38:230 INFO -  124 Testbluetooth.cpp 85 Connected to Socket Server..
+12:07:38:242 INFO -  124 Testbluetooth.cpp 113 Loaded L2CAP protocol..
+12:07:38:659 ERR  -  124 Testbluetooth.cpp 124 Open Socket [0]
+12:07:39:841 INFO -  124 Testbluetooth.cpp 138 Connection Established Successfully [0]
+12:07:39:846 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 12 Command = RUN_TEST_STEP 100 TEF_Bluetooth_Server AcceptBT ***Result = PASS </font>
+12:07:39:858 z:\sampletest\slave.script END_SYNCHRONISED_TESTCASE TestTwo
+12:07:39:875 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 13 Command = END_SYNCHRONISED_TESTCASE TestTwo ***TestCaseResult = PASS </font>
+12:07:39:892 z:\sampletest\slave.script START_SYNCHRONISED_TESTCASE TestThree
+12:07:39:897 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 15 Command = START_SYNCHRONISED_TESTCASE TestThree  </font>
+12:07:54:054 z:\sampletest\slave.script PRINT TestThree Sycnhronsised Test block
+12:07:54:056 INFO -  114 Scriptengine.cpp 855  TestThree Sycnhronsised Test block
+
+12:07:54:066 z:\sampletest\slave.script RUN_TEST_STEP 100 TEF_Bluetooth_Server  ReceiveBT 
+12:07:54:084 INFO -  124 Testbluetooth.cpp 222 Recieving File...
+12:07:54:095 INFO -  124 Testbluetooth.cpp 228  No Error in File Creation 0
+12:07:54:115 INFO -  124 Testbluetooth.cpp 265 Receiving File Completed Succesfully 0
+12:07:54:539 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 17 Command = RUN_TEST_STEP 100 TEF_Bluetooth_Server  ReceiveBT ***Result = PASS </font>
+12:07:54:550 z:\sampletest\slave.script END_SYNCHRONISED_TESTCASE TestThree
+12:07:54:566 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 18 Command = END_SYNCHRONISED_TESTCASE TestThree ***TestCaseResult = PASS </font>
+12:07:54:576 z:\sampletest\slave.script START_SYNCHRONISED_TESTCASE TestFour
+12:07:54:581 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 20 Command = START_SYNCHRONISED_TESTCASE TestFour  </font>
+12:08:06:912 z:\sampletest\slave.script PRINT TestFour Sycnhronsised Test block
+12:08:06:921 INFO -  114 Scriptengine.cpp 855  TestFour Sycnhronsised Test block
+
+12:08:06:977 z:\sampletest\slave.script END_SYNCHRONISED_TESTCASE TestFour
+12:08:06:993 <font size=2 color=00AF00>z:\sampletest\slave.script Line = 22 Command = END_SYNCHRONISED_TESTCASE TestFour ***TestCaseResult = PASS </font>
+12:08:07:021 <font size=2 color=00AFFF>TEST STEP SUMMARY:</font>
+12:08:07:081 <font size=2 color=00AF00>PASS = 2</font>
+12:08:07:308 <font size=2 color=FF0000>FAIL = 0</font>
+12:08:07:546 <font size=2 color=0000FF>ABORT = 0</font>
+12:08:07:551 <font size=2 color=0000FF>PANIC = 0</font>
+12:08:07:554 <font size=2 color=0000FF>INCONCLUSIVE = 0</font>
+12:08:07:557 <font size=2 color=0000FF>UNKNOWN = 0</font>
+12:08:07:561 <font size=2 color=0000FF>UNEXECUTED = 0</font>
+12:08:07:564 <font size=2 color=00AFFF>TEST CASE SUMMARY:</font>
+12:08:07:569 <font size=2 color=00AF00>PASS = 4</font>
+12:08:07:574 <font size=2 color=FF0000>FAIL = 0</font>
+12:08:07:579 <font size=2 color=0000FF>INCONCLUSIVE = 0</font>
+12:08:07:585 </pre></body></html>

@@ -1,0 +1,18 @@
+To use STATApi with Perl requires that Perl has access to the Win32::API module.  This is not a standard component of the ActiveState Perl download but it is easy to download seperately.  From a command prompt (with the Perl binaries in the path):
+1. Type 'ppm' to start the Perl Package Manager.
+The prompt will change to show you are in a different command interpretor.
+2. Type 'search Win32::API'.
+PPM should find several packages that match the description.  Select a suitable package (an example of one that worked under test was Win32-API from ActiveState).
+3. Type 'install <Package Name>'.
+For example, this may be 'install Win32-API'.  PPM will install the package and confirm that Win::API is added to the Perl libraries.
+4. Type 'exit' to close PPM.
+The prompt will return to the command shell.
+
+To run a Perl script making use of STATApi the file STATApi.pm must be in the same folder as the script OR in the Perl library folder.  (During testing it is easier to copy the file to where the script is executed).
+
+To debug the behaviour of the STAT.dll library under Perl use VC++ and specify some project settings for the STAT.dll project.
+1. Locate the Debug tab of the Project Settings dialog.
+2. For the executable entry browse to the Perl application (probably 'C:\Perl\bin\Perl.exe' for example).
+3. For the working directory enter the folder that contains the script (and the file STATApi.pm if this is not in the Perl library folder).
+4. For the program arguments enter the path to the script to be executed.
+You can now set breakpoints in the DLL code and VC++ will hit these when the script executes.

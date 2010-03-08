@@ -1,0 +1,79 @@
+#!/bin/bash
+#$Header: /usr/local/cvsroot/3GNetworkEmulator/Source/UUInterface/Load.Nistnet,v 1.1 2003/11/17 16:17:02 penuser Exp $
+# Script to load the kernel module, saving the rtc if possible
+#
+# Mark Carson, NIST/UMCP
+#  1/2001
+
+# Surely there's a better way to do this...
+versionstring=`uname -r | sed 's/\./ /g'`
+read version0 version1 version2 << below
+$versionstring
+below
+
+case $version0 in
+	2)
+		;;
+	*)
+		echo Sorry, NIST Net runs only on 2.0.xx or 2.2.xx kernels
+		exit 1
+		;;
+esac
+
+# This no doubt is not the way to find the system map
+# for the current kernel, but hopefully it will do.
+if [ -r /System.map ] ; then
+	map=/System.map
+elif [ -r /boot/System.map ] ; then
+	map=/boot/System.map
+elif [ -r /usr/src/linux/System.map ] ; then
+	map=/usr/src/linux/System.map
+fi
+
+case $version1 in
+	0)
+		# Look for irq_action - why doesn't a pipe work? Sheesh...
+		grep irq_action $map > /tmp/j$$
+		read irq_action junk < /tmp/j$$
+		rm /tmp/j$$
+		if [ "$irq_action" != "" ] ; then
+			insmod nistnet irq_desc_addr=0x$irq_action
+		else
+			insmod nistnet
+		fi
+		;;
+	2)
+		# Look for irq_desc - why doesn't a pipe work? Sheesh...
+		grep irq_desc $map > /tmp/j$$
+		read irq_desc junk < /tmp/j$$
+		rm /tmp/j$$
+		if [ "$irq_desc" != "" ] ; then
+			insmod nistnet irq_desc_addr=0x$irq_desc
+		else
+			insmod nistnet
+		fi
+		;;
+	4)
+		# Try to remove rtc module
+		rmmod rtc
+		if [ $? != 0 ] ; then
+		    echo "Couldn't find rtc module - /dev/rtc will be mostly"
+		    echo "unusable after running nistnet.  Sorry about that...."
+		    echo "To prevent this message, recompile rtc"
+		    echo "(Enhanced Real Time Clock Support, under"
+		    echo "character devices) as a module."
+		else
+		    echo "rtc module removed - you may want to reinstall it"
+		    echo "(with insmod rtc) after you are done with nistnet"
+		fi
+
+		insmod nistnet
+		echo "nistnet module installed"
+		;;
+	*)
+		echo Sorry, NIST Net runs only on 2.0, 2.2 or 2.4 kernels
+		exit 1
+		;;
+esac
+
+exit 0

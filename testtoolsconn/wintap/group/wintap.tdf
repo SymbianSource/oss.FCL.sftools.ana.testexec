@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool name="WinTap" 
+	description="WinTap is a tool that is used to provide internet connectivity between the device and the workstation"  
+	version="2.1.2001" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="TDF_v1.1.xsd">
+  <properties>
+    <property name="visible" type="toolLogic" value="false"></property>
+  </properties>
+  <templates>
+    <template type="nsis" operation="uninstall" name="\epoc32\engineeringtools\driver\wintap.uninstaller.nsh" output="wintap.uninstaller.nsh">
+    </template>
+    <template type="nsis" operation="configure" name="\epoc32\engineeringtools\driver\wintap.configure.nsh" output="wintap.configure.nsh">
+    </template>
+  </templates>
+  <files>
+    <file source="\epoc32\engineeringtools\driver\license.txt" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\OemWin2k.inf" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\tap0801.sys" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\tap0901.cat" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\tap0901.sys" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\tap0901.inf" target="$INSTDIR\driver"/>
+    <file source="\epoc32\engineeringtools\driver\x64driver\tap0901.cat" target="$INSTDIR\driver\x64driver"/>
+    <file source="\epoc32\engineeringtools\driver\x64driver\tap0901.sys" target="$INSTDIR\driver\x64driver"/>
+    <file source="\epoc32\engineeringtools\driver\x64driver\tap0901.inf" target="$INSTDIR\driver\x64driver"/>
+    <file source="\epoc32\engineeringtools\driver\x64driver\tapinstaller.x64.exe" target="$INSTDIR\driver\x64driver"/>
+    <file source="\epoc32\engineeringtools\driver\tapinstaller.exe" target="$INSTDIR\driver"/>
+    <file source="\epoc32\release\winscw\udeb\wintap.lib" target="$EPOCROOT\epoc32\release\winscw\udeb"/>
+    <file source="\epoc32\release\winscw\udeb\ethertap.pdd" target="$EPOCROOT\epoc32\release\winscw\udeb"/>
+    <file source="\epoc32\release\winscw\urel\wintap.lib" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\winscw\urel\ethertap.pdd" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+    <file source="\epoc32\release\winscw\urel\ethertap.pdd.map" target="$EPOCROOT\epoc32\release\winscw\urel"/>
+  </files>
+</tool>

@@ -1,0 +1,124 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#
+
+#######################################################################################
+#
+# USE-CASE-6 : Establish a PPP session and connect to a remote chargen server from
+#			   the lubbock board.
+#
+#######################################################################################
+
+#######################################################################################
+#
+# Start the services
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Create two MTs and make them talk to each other
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=1 FILTERCONFIG=0
+	assign dev0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=1 FILTERCONFIG=0
+	assign dev1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=dev0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=dev1
+	assign local_uu_port1=AIR_INPORT
+
+runcmd svcid=5 svchost="penmn"		methodid=10 DEVICEID=dev0	REMOTE_ADDRESS="penpdsn"	REMOTE_PORT=local_uu_port1
+runcmd svcid=5 svchost="penpdsn"	methodid=10 DEVICEID=dev1	REMOTE_ADDRESS="penmn"		REMOTE_PORT=local_uu_port0
+
+
+#######################################################################################
+#
+# Create a single PPP sessions and wait for the SymbianOS device to connect
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	methodid=31 MADDR="localhost" MPORT=7000 MTID=dev1 CONFIG="noauth 192.168.200.20:192.168.200.10 debug nodetach"
+	assign sid1=RESULT
+
+
+#######################################################################################
+#
+# Signal the device that the network is setup and wait for a signal that the test
+# has completed
+#
+#######################################################################################
+assign DEVICEID=dev0
+assign COMMDB_ISP_INDEX=2
+runcmd svcid=9 svchost="localhost" methodid=4 MSG="VERIFY: that the SymbianOS test is running."
+signal
+waitforsignal
+
+
+#######################################################################################
+#
+# Stop the PPP session
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn" methodid=6 SID=sid1
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn" methodid=8 SID=sid1
+runcmd svcid=7 svchost="penpdsn" methodid=32 SID=sid1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Remove the mobster devices (they should already have stopped)
+#
+#######################################################################################
+runcmd svcid=5  svchost="penmn"	methodid=6 DEVICEID=dev0
+	check RESULT=0
+runcmd svcid=5  svchost="penmn"	methodid=7 DEVICEID=dev0
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=dev1
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=dev1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Stop all the services
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Done
+#
+#######################################################################################
+rendezvous

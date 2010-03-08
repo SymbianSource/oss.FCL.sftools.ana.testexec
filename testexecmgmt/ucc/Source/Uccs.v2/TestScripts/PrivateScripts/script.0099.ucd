@@ -1,0 +1,19 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-99: This is for 'interactive' commands, i.e. this is just for putting 
+#		 whatever you want in, just saves you from creating a new file.
+#   UP-TO-DATE
+#
+runcmd svcid=7 svchost="penmn" methodid=30

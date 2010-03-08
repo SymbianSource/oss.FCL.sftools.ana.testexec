@@ -1,0 +1,6 @@
+<!ELEMENT RTestRom (name,devicePath,resultFile*,timeout)>
+<!ATTLIST RTestRom type CDATA "normal">
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT devicePath (#PCDATA)>
+<!ELEMENT resultFile (#PCDATA)>
+<!ELEMENT timeout (#PCDATA)>

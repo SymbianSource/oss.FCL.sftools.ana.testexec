@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE testExecuteTest SYSTEM "file:///c:/program files/common files/symbian/testExecuteTest.dtd" [ ]>
+
+<testExecuteTest>
+	<name>UCCSlave</name>
+
+	<testItems>
+		<suite>SampleTestServer</suite>
+	</testItems>
+
+</testExecuteTest>

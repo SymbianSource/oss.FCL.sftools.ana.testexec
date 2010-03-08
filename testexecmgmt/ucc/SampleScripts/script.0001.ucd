@@ -1,0 +1,178 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:  
+#
+
+#######################################################################################
+#
+# USE-CASE-1 : Configure the QoS of a Linux-to-Linux PPP channel
+#
+#######################################################################################
+
+#######################################################################################
+#
+# Start the services
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"	methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=7 svchost="penmn"	methodid=1
+	check RESULT=0
+runcmd svcid=8 svchost="penmn"	methodid=1
+	check RESULT=0
+runcmd svcid=10 svchost="penmn"	methodid=1
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=1
+	check RESULT=0
+runcmd svcid=6 svchost="penuu" methodid=1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Create two MTs and make them talk to each other
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=1 FILTERCONFIG=0
+	assign dev0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=1 FILTERCONFIG=0
+	assign dev1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=dev0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=dev1
+	assign local_uu_port1=AIR_INPORT
+
+runcmd svcid=5 svchost="penmn"		methodid=10 DEVICEID=dev0	REMOTE_ADDRESS="192.168.10.11"		REMOTE_PORT=local_uu_port1
+runcmd svcid=5 svchost="penpdsn"	methodid=10 DEVICEID=dev1	REMOTE_ADDRESS="192.168.14.10"		REMOTE_PORT=local_uu_port0
+
+
+#######################################################################################
+#
+# Create two PPP sessions and wait for them to connect to one another
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"		methodid=31 MADDR="localhost" MPORT=7000 MTID=dev0 CONFIG="defaultroute noauth debug nodetach noaccomp nobsdcomp nodeflate novjccomp"
+	assign sid0=RESULT
+runcmd svcid=7 svchost="penpdsn"	methodid=31 MADDR="localhost" MPORT=7000 MTID=dev1 CONFIG="noauth 192.168.200.20:192.168.200.10 debug nodetach noaccomp nobsdcomp nodeflate novjccomp"
+	assign sid1=RESULT
+runcmd svcid=7 svchost="penmn"		methodid=7 SID=sid0
+	waitfor SESSION_STATUS=2
+runcmd svcid=7 svchost="penpdsn"	methodid=7 SID=sid1
+	waitfor SESSION_STATUS=2
+
+
+#######################################################################################
+#
+# Set the drop percentage and capture a few ping commands - you can use the 
+# icmp seq no to see how many were lost
+#
+#######################################################################################
+runcmd svcid=6 svchost="penuu" methodid=4 SRC="192.168.14.10" SRCPORT=local_uu_port0 DST="192.168.10.11" DSTPORT=local_uu_port1 DROPI=20 PROTOCOL="UDP"
+runcmd svcid=9 svchost="localhost" methodid=4 MSG="The drop rate of the PPP channel has been set to 20%. You can see the effect of this using the ICMP sequence numbers in the ping output below."
+runcmd svcid=8 svchost="penmn" methodid=3 COMMAND="ping -c 10 192.168.12.11" TIMEOUT=-1 GETSTDOUT=1 GETSTDERR=1
+runcmd svcid=8 svchost="penmn" methodid=3 COMMAND="ping -c 10 192.168.12.11" TIMEOUT=-1 GETSTDOUT=1 GETSTDERR=1
+
+
+#######################################################################################
+#
+# Now give the user a turn to play
+#
+#######################################################################################
+signal 
+waitforsignal
+runcmd svcid=6 svchost="penuu" methodid=4 SRC="192.168.14.10" SRCPORT=local_uu_port0 DST="192.168.10.11" DSTPORT=local_uu_port1 DROPI=0 PROTOCOL="UDP"
+
+
+#######################################################################################
+#
+# Set the delay percentage and play
+#
+#######################################################################################
+runcmd svcid=6 svchost="penuu" methodid=3 SRC="192.168.14.10" SRCPORT=local_uu_port0 DST="192.168.10.11" DSTPORT=local_uu_port1 DELAYI=150 PROTOCOL="UDP"
+runcmd svcid=9 svchost="localhost" methodid=4 MSG="The delay of the PPP channel has been set to 150ms. You can see the effect of this using the ICMP sequence numbers in the ping output below."
+runcmd svcid=10 svchost="penmn" methodid=31 CMD="ping 192.168.12.11"
+	assign pid0=RESULT
+runcmd svcid=10 svchost="penmn" methodid=8 PID=pid0
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+runcmd svcid=10 svchost="penmn" methodid=8 PID=pid0
+runcmd svcid=10 svchost="penmn" methodid=5 PID=pid0
+runcmd svcid=10 svchost="penmn" methodid=32 PID=pid0
+runcmd svcid=6 svchost="penuu" methodid=3 SRC="192.168.14.10" SRCPORT=local_uu_port0 DST="192.168.10.11" DSTPORT=local_uu_port1 DELAYI=0 PROTOCOL="UDP"
+
+
+#######################################################################################
+#
+# STOP the first ppp peer and then wait for the other end to terminate gracefully.
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn" methodid=6 SID=sid0
+	check RESULT=0
+runcmd svcid=7 svchost="penmn" methodid=8 SID=sid0
+runcmd svcid=7 svchost="penmn" methodid=32 SID=sid0
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=7 SID=sid1
+	waitfor SESSION_PROCESS_STATUS=3
+	check RESULT=0
+	check SESSION_STATUS=4
+runcmd svcid=7 svchost="penpdsn" methodid=8 SID=sid1
+runcmd svcid=7 svchost="penpdsn" methodid=32 SID=sid1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Remove the mobster devices, they should already have stopped
+#
+#######################################################################################
+runcmd svcid=5  svchost="penmn"	methodid=6 DEVICEID=dev0
+	check RESULT=0
+runcmd svcid=5  svchost="penmn"	methodid=7 DEVICEID=dev0
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=dev1
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=dev1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Stop all the services
+#
+#######################################################################################
+runcmd svcid=10 svchost="penmn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=8 svchost="penmn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=7 svchost="penmn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=5 svchost="penmn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=6 svchost="penuu" methodid=2
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Done
+#
+#######################################################################################
+rendezvous

@@ -1,0 +1,100 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description: 
+#   USE-CASE-0: Start/Stop Services
+#   UP-TO-DATE
+#   This script starts all the services, waits for a signal, and then stops all the 
+# services. This should only be used by an administrator.
+#
+
+
+
+#######################################################################################
+#
+# Start the services
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=7 svchost="penmn"		methodid=1
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=1
+	check RESULT=0
+runcmd svcid=2 svchost="penha"		methodid=1 BASEINTERFACE=0 BASENETMASK=24 BASESTARTRANGE=100 BASEENDRANGE=199 VIRTUALNETWORKPREFIX="192.168.111.0" VIRTUALNETWORKMASK=24 VIRTUALNETWORKSIZE=4
+	check RESULT=0
+runcmd svcid=3 svchost="penpdsn"	methodid=1 BASEINTERFACEINDEX=0 NETMASK=24 STARTHOSTADDRESSRANGE=100 STOPHOSTADDRESSRANGE=199
+	check RESULT=0
+runcmd svcid=4 svchost="penmn"		methodid=1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Signal that we are done
+#
+#######################################################################################
+signal
+waitforsignal
+
+
+#######################################################################################
+#
+# Get the object count for each service
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=9
+	check DEVICECOUNT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=9
+	check DEVICECOUNT=0
+runcmd svcid=7 svchost="penmn"		methodid=30
+	check DEVICECOUNT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=30
+	check DEVICECOUNT=0
+runcmd svcid=2 svchost="penha"		methodid=30
+	check AGENTCOUNT=0
+runcmd svcid=3 svchost="penpdsn"	methodid=30
+	check AGENTCOUNT=0
+runcmd svcid=4 svchost="penmn"		methodid=30
+	check AGENTCOUNT=0
+
+
+#######################################################################################
+#
+# Stop all the services
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"		methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=5 svchost="penmn"		methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=2 svchost="penha"		methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=3 svchost="penpdsn"	methodid=2 FORCE=0
+	check RESULT=0
+runcmd svcid=4 svchost="penmn"		methodid=2 FORCE=0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Done
+#
+#######################################################################################
+rendezvous

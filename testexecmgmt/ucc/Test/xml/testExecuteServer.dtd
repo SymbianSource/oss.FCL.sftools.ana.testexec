@@ -1,0 +1,48 @@
+<!ELEMENT testExecuteServer (name,mmpFile,bldInfPath,iniItems?,configFile?,resourceItems?,dependencies?)>
+
+<!-- Server -->
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT mmpFile (#PCDATA)>
+<!ELEMENT bldInfPath (#PCDATA)>
+
+<!-- ini file -->
+<!ELEMENT iniItems (iniFile*)>
+<!ELEMENT iniFile (hostPath,devicePath+)>
+<!ELEMENT hostPath (#PCDATA)>
+<!ELEMENT devicePath (#PCDATA)>
+
+<!-- config file -->
+<!ELEMENT configFile (hostPath,devicePath+)>
+<!ELEMENT configFile.hostPath (#PCDATA)>
+<!ELEMENT configFile.devicePath (#PCDATA)>
+
+<!-- resource items -->
+<!ELEMENT resourceItems (resource*,aif*)>
+<!ELEMENT resource (hostPath,devicePath+)>
+<!ELEMENT resource.hostPath (#PCDATA)>
+<!ELEMENT resource.devicePath (#PCDATA)>
+<!ELEMENT aif (hostPath,devicePath+)>
+<!ELEMENT aif.hostPath (#PCDATA)>
+<!ELEMENT aif.devicePath (#PCDATA)>
+
+<!-- Dependencies -->
+<!ELEMENT dependencies (data*,buildable*)>
+<!-- DATA -->
+<!ELEMENT data (hostPath,devicePath+)>
+<!ELEMENT data.hostPath (#PCDATA)>
+<!ELEMENT data.devicePath (#PCDATA)>
+
+<!-- BUILDABLE -->
+<!ELEMENT buildable (hostPath,devicePath+,mmpFile,bldInfPath,resourceItems?)>
+<!ATTLIST buildable type CDATA "test">
+<!ELEMENT buildable.hostPath (#PCDATA)>
+<!ELEMENT buildable.devicePath (#PCDATA)>
+<!ELEMENT buildable.mmpFile (#PCDATA)>
+<!ELEMENT buildable.bldInfPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems (resource*,aif*)>
+<!ELEMENT buildable.resourceItems.resource (hostPath,devicePath+)>
+<!ELEMENT buildable.resourceItems.resource.hostPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.resource.devicePath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.resource.aif (hostPath,devicePath+)>
+<!ELEMENT buildable.resourceItems.aif.hostPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.aif.devicePath (#PCDATA)>

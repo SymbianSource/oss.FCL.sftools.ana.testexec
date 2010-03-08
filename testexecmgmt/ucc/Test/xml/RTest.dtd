@@ -1,0 +1,41 @@
+<!ELEMENT RTest (name,mmpFile,bldInfPath,devicePath?,resoureItems?,resultFile?,logMemory?,timeout,dependencies?)>
+<!ATTLIST RTest type CDATA "normal">
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT mmpFile (#PCDATA)>
+<!ELEMENT bldInfPath (#PCDATA)>
+<!ELEMENT devicePath (#PCDATA)>
+
+<!-- resource items -->
+<!ELEMENT resourceItems (resource*,aif*)>
+<!ELEMENT resource (hostPath,devicePath+)>
+<!ELEMENT resource.hostPath (#PCDATA)>
+<!ELEMENT resource.devicePath (#PCDATA)>
+<!ELEMENT aif (hostPath,devicePath+)>
+<!ELEMENT aif.hostPath (#PCDATA)>
+<!ELEMENT aif.devicePath (#PCDATA)>
+
+<!ELEMENT resultFile (#PCDATA)>
+<!ELEMENT logMemory (#PCDATA)>
+<!ELEMENT timeout (#PCDATA)>
+
+<!-- Dependencies -->
+<!ELEMENT dependencies (data*,buildable*)>
+<!-- DATA -->
+<!ELEMENT data (hostPath,devicePath+)>
+<!ELEMENT hostPath (#PCDATA)>
+<!ELEMENT data.devicePath (#PCDATA)>
+
+<!-- BUILDABLE -->
+<!ELEMENT buildable (hostPath,devicePath+,mmpFile,bldInfPath,resourceItems?)>
+<!ATTLIST buildable type CDATA "test">
+<!ELEMENT buildable.hostPath (#PCDATA)>
+<!ELEMENT buildable.devicePath (#PCDATA)>
+<!ELEMENT buildable.mmpFile (#PCDATA)>
+<!ELEMENT buildable.bldInfPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems (resource*,aif*)>
+<!ELEMENT buildable.resourceItems.resource (hostPath,devicePath+)>
+<!ELEMENT buildable.resourceItems.resource.hostPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.resource.devicePath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.aif (hostPath,devicePath+)>
+<!ELEMENT buildable.resourceItems.aif.hostPath (#PCDATA)>
+<!ELEMENT buildable.resourceItems.aif.devicePath (#PCDATA)>

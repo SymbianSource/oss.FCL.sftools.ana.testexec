@@ -1,0 +1,131 @@
+-----------------------------------------------------------------
+
+Resource  Device: 134590272, Source: CDatalinkNull.
+
+Object Created
+-----------------------------------------------------------------
+
+Resource  Device: 134609472, Source: CTCPTEChannel.
+
+Object Created
+-----------------------------------------------------------------
+
+Resource  Device: 134613600, Source: CUDPAirInterface.
+
+Object Created
+-----------------------------------------------------------------
+
+Resource  Device: 0, Source: AirInterfaceProc.
+
+AirInterfaceThread started
+-----------------------------------------------------------------
+
+Resource  Device: 0, Source: TEChannelProc.
+
+TEChannelThread started
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPHONE.
+
+MT Emulation Started
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Outgoing). Length = 28, Discarded = 0
+Protocol: LCP
+	Code: Configure-Request
+	ID: 1
+	Length: 20
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Incoming). Length = 28, Discarded = 0
+Protocol: LCP
+	Code: Configure-Request
+	ID: 1
+	Length: 20
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Incoming). Length = 28, Discarded = 0
+Protocol: LCP
+	Code: Configure-Ack
+	ID: 1
+	Length: 20
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Outgoing). Length = 28, Discarded = 0
+Protocol: LCP
+	Code: Configure-Ack
+	ID: 1
+	Length: 20
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Incoming). Length = 18, Discarded = 20
+Protocol: 0101
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Outgoing). Length = 18, Discarded = 20
+Protocol: 0101
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Outgoing). Length = 18, Discarded = 20
+Protocol: 0201
+
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPPPFrameBuffer.
+
+PPP Frame(Incoming). Length = 18, Discarded = 20
+Protocol: 0201
+
+-----------------------------------------------------------------
+
+Resource  Device: 0, Source: TEChannelProc.
+
+TEChannelThread finished
+-----------------------------------------------------------------
+
+Warning   Device: 0, Source: CUDPAirInterface, Error code: 1 (0).
+-----------------------------------------------------------------
+
+Warning   Device: 0, Source: AirInterfaceProc, Error code: 6 (9).
+
+AirInterfaceThread finished
+-----------------------------------------------------------------
+
+Resource  Device: 134609472, Source: CTCPTEChannel.
+
+Object Destroyed
+-----------------------------------------------------------------
+
+Resource  Device: 134613600, Source: CUDPAirInterface.
+
+Object Destroyed
+-----------------------------------------------------------------
+
+Resource  Device: 134590272, Source: CDatalinkNull.
+
+Object Destroyed
+-----------------------------------------------------------------
+
+Info      Device: 0, Source: CPHONE.
+
+MT Emulation Stopped

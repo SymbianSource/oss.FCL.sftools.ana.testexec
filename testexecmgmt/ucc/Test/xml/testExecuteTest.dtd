@@ -1,0 +1,40 @@
+<!ELEMENT testExecuteTest (name,timeout,testScripts,stepLogs?,testServers,dependencies?)>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT timeout (#PCDATA)>
+
+<!-- Test Scripts -->
+<!ELEMENT testScripts (script+)>
+<!ELEMENT script (hostPath,devicePath+)>
+<!ELEMENT hostPath (#PCDATA)>
+<!ELEMENT devicePath (#PCDATA)>
+
+<!-- Test Servers found in test scripts -->
+<!ELEMENT testServers (server+)>
+<!ELEMENT server (#PCDATA)>
+
+<!-- Test Servers found in test scripts -->
+<!ELEMENT stepLogs (log+)>
+<!ELEMENT log (#PCDATA)>
+
+<!-- Dependencies -->
+<!ELEMENT dependencies (data*,buildable*)>
+<!-- DATA -->
+<!ELEMENT data (hostPath,devicePath+)>
+<!ELEMENT data.hostPath (#PCDATA)>
+<!ELEMENT data.devicePath (#PCDATA)>
+
+<!-- BUILDABLE -->
+<!ELEMENT buildable (hostPath,devicePath+,mmpFile,bldInfPath,resourceItems?)>
+<!ATTLIST buildable type CDATA "test">
+<!ELEMENT buildable.hostPath (#PCDATA)>
+<!ELEMENT buildable.devicePath (#PCDATA)>
+<!ELEMENT mmpFile (#PCDATA)>
+<!ELEMENT bldInfPath (#PCDATA)>
+<!ELEMENT resourceItems (resource*,aif*)>
+<!ELEMENT resource (hostPath,devicePath+)>
+<!ELEMENT buildable.resource.hostPath (#PCDATA)>
+<!ELEMENT buildable.resource.devicePath (#PCDATA)>
+<!ELEMENT aif (hostPath,devicePath+)>
+<!ELEMENT buildable.aif.hostPath (#PCDATA)>
+<!ELEMENT buildable.aif.devicePath (#PCDATA)>

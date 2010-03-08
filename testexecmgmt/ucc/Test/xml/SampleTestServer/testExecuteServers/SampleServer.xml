@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE testExecuteServer SYSTEM "file:///c:/program files/common files/symbian/testExecuteServer.dtd" [ ]>
+
+<testExecuteServer>
+	<name>
+		SampleServer
+	</name>
+	
+	<mmpFile>
+		SampleServer.mmp
+	</mmpFile>
+	
+	<bldInfPath>
+		\EPOC\development\personal\jamesv\ProductisedUCC\TestExecute\Group\bld.inf
+	</bldInfPath>
+
+	<iniItems>
+		<iniFile>
+			<hostPath>\UCC_Test\Scripts\BasicSync\Slave\sampletest.ini</hostPath>
+			<devicePath>c:\UCC\sampletest.ini</devicePath>
+		</iniFile>
+	</iniItems>
+</testExecuteServer>

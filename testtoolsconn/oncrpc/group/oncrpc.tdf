@@ -1,0 +1,10 @@
+<tool name="ONCRPC" version="1.14.3" description="Basic installation of oncrpc">
+	<templates>
+		<template type="nsis" operation="configure" name="\epoc32\engineeringtools\oncrpc\oncrpc.configure.nsh" />
+	</templates>
+	<files>
+		<file source="\epoc32\engineeringtools\oncrpc\bin\oncrpc.dll" target="$WINDIR\system32" overwrite="false"/>
+		<file source="\epoc32\engineeringtools\oncrpc\bin\portmap.exe" target="$WINDIR\system32" overwrite="false"/>
+		<file source="\epoc32\engineeringtools\oncrpc\bin\portmap.srg" target="$WINDIR\system32" overwrite="false"/>
+	</files>
+</tool>

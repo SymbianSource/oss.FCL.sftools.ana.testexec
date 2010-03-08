@@ -1,0 +1,76 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:  
+// Component description file
+// Exports
+//
+PRJ_EXPORTS
+
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Productised UCC Export
+//
+///////////////////////////////////////////////////////////////////////////
+
+// UCC IBY file
+..\group\ucc.iby   									\epoc32\rom\include\ucc.iby
+
+// UCC binary and example ini file
+..\..\bin\ucc.exe									\epoc32\engineeringtools\ucc\bin\ucc.exe
+..\..\bin\ucc.ini									\epoc32\engineeringtools\ucc\bin\ucc.ini
+
+// UCC NSIS config
+..\group\ucc.configure.nsh							\epoc32\engineeringtools\ucc\ucc.configure.nsh
+
+// Generic service library and header files
+..\..\GenericService\bin\Release\GenericService.lib					\epoc32\engineeringtools\ucc\genericservice\lib\genericservice.lib
+..\..\GenericService\inc\CCall.h							\epoc32\engineeringtools\ucc\genericservice\inc\ccall.h
+..\..\GenericService\inc\CService.h							\epoc32\engineeringtools\ucc\genericservice\inc\cservice.h
+..\..\GenericService\inc\GenericStub.h							\epoc32\engineeringtools\ucc\genericservice\inc\genericstub.h
+
+
+// Sync service binary, configuration ini, interface ini and test script files
+..\..\GenericService\SyncService\bin\Release\SyncService.exe				\epoc32\engineeringtools\ucc\syncservice\bin\syncservice.exe
+..\..\GenericService\SyncService\Configuration\SyncService.ini				\epoc32\engineeringtools\ucc\syncservice\bin\syncservice.ini
+..\..\GenericService\SyncService\Interface\Device\SyncService.ini			\epoc32\engineeringtools\ucc\syncservice\interface\device\syncservice.ini
+..\..\GenericService\SyncService\Interface\Host\SyncServiceInterface.ini		\epoc32\engineeringtools\ucc\syncservice\interface\host\syncserviceinterface.ini
+..\..\GenericService\TestScripts\Synchronisation\Master\master.script			\epoc32\engineeringtools\ucc\syncservice\testscripts\master\master.script
+..\..\GenericService\TestScripts\Synchronisation\Master\SyncService.ini			\epoc32\engineeringtools\ucc\syncservice\testscripts\master\syncservice.ini
+
+// TestDriver service binary and interface ini files
+..\..\GenericService\TestDriverService\bin\Release\TestDriverService.exe		\epoc32\engineeringtools\ucc\testdriverservice\bin\testdriverservice.exe
+..\..\GenericService\TestDriverService\Configuration\TestDriverService.ini		\epoc32\engineeringtools\ucc\testdriverservice\bin\testdriverservice.ini
+..\..\GenericService\TestDriverService\Interface\Device\TestDriverService.ini		\epoc32\engineeringtools\ucc\testdriverservice\interface\device\testdriverservice.ini
+..\..\GenericService\TestDriverService\Interface\Host\TestDriverServiceInterface.ini	\epoc32\engineeringtools\ucc\testdriverservice\interface\host\testdriverserviceinterface.ini
+..\..\GenericService\TestScripts\Synchronisation\Slave\slave.script			\epoc32\engineeringtools\ucc\syncservice\testscripts\slave\slave.script
+..\..\GenericService\TestScripts\Synchronisation\Slave\sampletest.ini			\epoc32\engineeringtools\ucc\syncservice\testscripts\slave\sampletest.ini
+
+// Remote interface library and header files
+..\..\RemoteInterface\bin\Release\RemoteInterface.lib					\epoc32\engineeringtools\ucc\remoteinterface\lib\remoteinterface.lib
+..\..\RemoteInterface\inc\CRemoteInterface.h						\epoc32\engineeringtools\ucc\remoteinterface\inc\cremoteinterface.h
+..\..\RemoteInterface\inc\MUCCTransport.h						\epoc32\engineeringtools\ucc\remoteinterface\inc\mucctransport.h
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Headers For Symbian platform Libraries
+//
+//////////////////////////////////////////////////////////////////////////
+..\..\Source\UCCSDeviceControl\CNetworkEmulatorSetupCommdb.h		\epoc32\include\networkemulator\cnetworkemulatorsetupcommdb.h
+..\..\Source\UCCSDeviceControl\CUCCSDeviceControl.h			\epoc32\include\networkemulator\cuccsdevicecontrol.h
+..\..\Source\UCCSDeviceControl\NetworkEmulatorControl.h			\epoc32\include\networkemulator\networkemulatorcontrol.h
+..\..\Source\Uccs.v2\Core\UCCS_ErrorCodes.h				\epoc32\include\networkemulator\uccs_errorcodes.h
+..\..\Source\UCCSDeviceControl\CUCCSDeviceProtocol.h			\epoc32\include\networkemulator\cuccsdeviceprotocol.h
+..\..\Source\Uccs.v2\DeviceControlChannel\CProtocolTypes.h		\epoc32\include\networkemulator\cprotocoltypes.h
+..\..\Source\UCCSDeviceControl\MUCCTransport.h			\epoc32\include\networkemulator\mucctransport.h

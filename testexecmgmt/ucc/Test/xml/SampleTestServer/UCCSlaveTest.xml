@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE testExecuteTest SYSTEM "file:///c:/program files/common files/symbian/testExecuteTest.dtd" [ ]>
+
+<testExecuteTest>
+	<name>
+		UCCSlaveTest
+	</name>
+		
+	<timeout>
+		120
+	</timeout>
+	
+	<testScripts>
+		<script>
+			<hostPath>\UCC_Test\Scripts\BasicSync\Slave\slave.script</hostPath>
+			<devicePath>c:\UCC\slave.script</devicePath>
+		</script>
+	</testScripts>
+
+	<testServers>
+		<server>SampleServer</server>
+	</testServers>
+</testExecuteTest>

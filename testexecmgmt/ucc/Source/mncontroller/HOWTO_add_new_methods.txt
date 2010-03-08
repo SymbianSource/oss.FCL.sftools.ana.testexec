@@ -1,0 +1,21 @@
+
+ --**-- HOWTO: Add new methods --**--
+
+ This is just a quick note that describes how to add a new method to an existing service. 
+
+ The problem is that once you've written a service, you've modified the CSvc class and 
+ the CS class, so the code generator can't update these for you. So you have to do a
+ couple of things manually - and this note is to make sure you don't miss something.
+
+ (1) Add to the .x file and regenerate the basic files.
+
+ (2) Add the signature to the CS.h file, put it in the correct order to keep things clean.
+
+ (3) Add the implementation to the CS.cpp file. There is nothing much to remember here,
+	 just make sure you return a normal value (call it rv) and everything is OK. 
+
+ (4) Add a section to the instance keys.
+
+ (5) Add a section to SetError().
+
+ DONE

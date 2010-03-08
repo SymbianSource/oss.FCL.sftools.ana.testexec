@@ -1,0 +1,36 @@
+<!ELEMENT testSuite (name,testItems,testExecuteServers?,dependencies?)>
+
+<!ELEMENT name (#PCDATA)>
+
+<!-- Test Items in Suites: Tests and Suites -->
+<!ELEMENT testItems (suite*,test*,suiteRef*,testRef*)>
+<!ELEMENT suite (#PCDATA)>
+<!ELEMENT test (#PCDATA)>
+<!ELEMENT suiteRef (#PCDATA)>
+<!ELEMENT testRef (#PCDATA)>
+
+<!-- Test Execute Servers -->
+<!ELEMENT testExecuteServers (server*)>
+<!ELEMENT server (#PCDATA)>
+
+<!-- Dependencies -->
+<!ELEMENT dependencies (data*,buildable*)>
+<!-- DATA -->
+<!ELEMENT data (hostPath,devicePath+)>
+<!ELEMENT hostPath (#PCDATA)>
+<!ELEMENT devicePath (#PCDATA)>
+
+<!-- BUILDABLE -->
+<!ELEMENT buildable (hostPath,devicePath+,mmpFile,bldInfPath,resourceItems?)>
+<!ATTLIST buildable type CDATA "test">
+<!ELEMENT buildable.hostPath (#PCDATA)>
+<!ELEMENT buildable.devicePath (#PCDATA)>
+<!ELEMENT mmpFile (#PCDATA)>
+<!ELEMENT bldInfPath (#PCDATA)>
+<!ELEMENT resourceItems (resource+,aif+)>
+<!ELEMENT resource (hostPath,devicePath+)>
+<!ELEMENT buildable.resource.hostPath (#PCDATA)>
+<!ELEMENT buildable.resource.devicePath (#PCDATA)>
+<!ELEMENT aif (hostPath,devicePath+)>
+<!ELEMENT buildable.aif.hostPath (#PCDATA)>
+<!ELEMENT buildable.aif.devicePath (#PCDATA)>

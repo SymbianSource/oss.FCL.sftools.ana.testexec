@@ -1,0 +1,261 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-21: Foreign Agent Handover
+#
+
+#######################################################################################
+#
+# Do some initialisations
+#
+#######################################################################################
+runcmd svcid=6 svchost="penuu"	methodid=2 SRC="192.168.14.10:5000.udp" DST="192.169.10.11:5000.udp" DROPI=0
+runcmd svcid=8 svchost="penmn"		methodid=1  CMD="cp --reply=yes /etc/ppp/BACKUP-ip-up.local /etc/ppp/ip-up.local"
+runcmd svcid=2 svchost="penha"		methodid=13 TIMEOUT=10
+runcmd svcid=3 svchost="penpdsn"	methodid=13 TIMEOUT=10
+
+
+#######################################################################################
+#
+# Startup the Mobster service on the MN and the PDSN
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn"		methodid=1 PORT=7000
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn"	methodid=1 PORT=7000
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Create a device on each machine and set them as peers
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=mt0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=mt1
+	assign local_uu_port1=AIR_INPORT
+runcmd svcid=5 svchost="penmn" methodid=10 DEVICEID=mt0 REMOTE_ADDRESS="192.169.10.11" REMOTE_PORT=local_uu_port1
+runcmd svcid=5 svchost="penpdsn" methodid=10 DEVICEID=mt1 REMOTE_ADDRESS="10.22.1.6" REMOTE_PORT=local_uu_port0
+
+
+#######################################################################################
+#
+# Create a PPP session on the MN and PDSN
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"		methodid=3 MADDR="localhost" MPORT=7000 CONFIG="defaultroute noauth 0.0.0.1:192.168.200.20 debug nodetach"
+runcmd svcid=7 svchost="penpdsn"	methodid=3 MADDR="localhost" MPORT=7000 CONFIG="noauth 192.168.200.20:0.0.0.1 debug nodetach"
+
+
+#######################################################################################
+#
+# The PPP session should now be setup.
+#
+#######################################################################################
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=2000
+
+
+#######################################################################################
+#
+# Start the home agent and the foreign agent running.
+#
+#######################################################################################
+runcmd svcid=2	 svchost="penha"		methodid=6 TOKEN="MaxBindings" VALUE=0
+runcmd svcid=2   svchost="penha"		methodid=3
+runcmd svcid=3   svchost="penpdsn"		methodid=3
+runcmd svcid=9   svchost="localhost"	methodid=1 PERIOD=3000
+
+
+#######################################################################################
+#
+# Start the mobile node service, create ann object, and start the agent
+#
+#######################################################################################
+runcmd svcid=4	 svchost="penmn"		methodid=1
+	check RESULT=0
+runcmd svcid=4	 svchost="penmn"		methodid=31
+	assign mn0=RESULT
+runcmd svcid=4   svchost="penmn"		methodid=3 AGENTID=mn0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# Signal that we have completed the setup.
+#
+#######################################################################################
+signal 
+
+
+#######################################################################################
+#
+# Wait for signal to say disconnect
+#
+#######################################################################################
+waitforsignal
+
+
+#######################################################################################
+#
+# Stop the MN (deregister MIP)
+#
+#######################################################################################
+runcmd svcid=4	svchost="penmn"			methodid=4 AGENTID=mn0
+	check RESULT=0
+runcmd svcid=9	svchost="localhost"		methodid=1 PERIOD=2000
+runcmd svcid=3	svchost="penpdsn"		methodid=4
+runcmd svcid=2	svchost="penha"			methodid=4
+runcmd svcid=9  svchost="localhost"		methodid=1 PERIOD=1000
+
+
+#######################################################################################
+#
+# Now stop the PPP connection between the MN and the PDSN
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	methodid=4 SID=0
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penpdsn"	methodid=6 SID=0
+runcmd svcid=7 svchost="penmn"		methodid=4 SID=0
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penmn"		methodid=6 SID=0
+
+
+#######################################################################################
+#
+# Remove the mobster devices
+#
+#######################################################################################
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=mt1
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=mt1
+runcmd svcid=5  svchost="penmn"		methodid=6 DEVICEID=mt0
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penmn"		methodid=7 DEVICEID=mt0
+
+
+#######################################################################################
+#
+# Signal that the connection has been brought down
+#
+#######################################################################################
+signal
+
+
+#######################################################################################
+#
+# Wait for a signal to bring the connection back up
+#
+#######################################################################################
+waitforsignal
+
+
+#######################################################################################
+#
+# Create a device on each machine and set them as peers
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=mt0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=mt1
+	assign local_uu_port1=AIR_INPORT
+runcmd svcid=5 svchost="penmn" methodid=10 DEVICEID=mt0 REMOTE_ADDRESS="192.169.10.11" REMOTE_PORT=local_uu_port1
+runcmd svcid=5 svchost="penpdsn" methodid=10 DEVICEID=mt1 REMOTE_ADDRESS="10.22.1.6" REMOTE_PORT=local_uu_port0
+
+
+#######################################################################################
+#
+# Restart the PPP connection
+#
+#######################################################################################
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penmn"		methodid=3 MADDR="localhost" MPORT=4000 CONFIG="defaultroute noauth 0.0.0.2:192.168.220.20 debug nodetach"
+runcmd svcid=7 svchost="penpdsn"	methodid=3 MADDR="localhost" MPORT=4000 CONFIG="noauth 192.168.220.20:0.0.0.2 debug nodetach"
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=6000
+
+
+#######################################################################################
+#
+# Restart the mobile agent (and the FA)
+#
+#######################################################################################
+runcmd svcid=2   svchost="penha"		methodid=3
+runcmd svcid=3   svchost="penpdsn"		methodid=3
+runcmd svcid=9   svchost="localhost"	methodid=1 PERIOD=3000
+runcmd svcid=4	 svchost="penmn"		methodid=3 AGENTID=mn0
+	check RESULT=0
+signal
+
+
+#######################################################################################
+#
+# Stop the MA, FA, HA
+#
+#######################################################################################
+waitforsignal
+runcmd svcid=4	svchost="penmn"			methodid=4  AGENTID=mn0
+	check RESULT=0
+runcmd svcid=4  svchost="penmn"			methodid=32 AGENTID=mn0
+	check RESULT=0
+runcmd svcid=4  svchost="penmn"			methodid=2
+	check RESULT=0
+runcmd svcid=9	svchost="localhost"		methodid=1 PERIOD=2000
+runcmd svcid=3	svchost="penpdsn"		methodid=4
+runcmd svcid=2	svchost="penha"			methodid=4
+runcmd svcid=9  svchost="localhost"		methodid=1 PERIOD=1000
+
+
+#######################################################################################
+#
+# Cleanup the PPP session (MN and PDSN) (hardcode session ID as zero) retrieving all the logs
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	methodid=4 SID=0
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penpdsn"	methodid=6 SID=0
+runcmd svcid=7 svchost="penmn"		methodid=4 SID=0
+runcmd svcid=9 svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=7 svchost="penmn"		methodid=6 SID=0
+
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=mt1
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=mt1
+runcmd svcid=5  svchost="penmn"		methodid=6 DEVICEID=mt0
+runcmd svcid=9	svchost="localhost"	methodid=1 PERIOD=1000
+runcmd svcid=5  svchost="penmn"		methodid=7 DEVICEID=mt0
+
+
+#######################################################################################
+#
+# We should be back to our original state now -- quit
+#
+#######################################################################################
+runcmd svcid=8 svchost="penmn"	methodid=1 CMD="rm -f /etc/ppp/ip-up.local"
+rendezvous
+
+
+
+
+

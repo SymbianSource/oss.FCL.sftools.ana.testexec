@@ -1,0 +1,127 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-1: Standard PPP session.
+#   UP-TO-DATE
+#   (1)	Setup a PPP session between the MN and the PDSN. The PDSN will attach the session
+#	to the 192.168.200.x network, which has appropriate routes setup throughout 
+#	the inter-network. 
+#   (2)	Wait for a signal to bring down the link.
+#   (3)	Tell the PDSN to close the PPP connection and send a TERM-ACK. Wait for the MN
+#	side to shut itself down cleanly.
+#
+
+
+
+#######################################################################################
+#
+# MOBSTER:  Create an MT on the MN and the PDSN and link them to each other. Packetise
+#			PPP frames before sending them over the network.
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=mt0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=mt1
+	assign local_uu_port1=AIR_INPORT
+runcmd svcid=5 svchost="penmn" methodid=10 DEVICEID=mt0 REMOTE_ADDRESS="192.169.10.11" REMOTE_PORT=local_uu_port1
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn" methodid=10 DEVICEID=mt1 REMOTE_ADDRESS="10.22.1.6" REMOTE_PORT=local_uu_port0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# PPP:	Create a session on each machine using the new MTs. The PDSN session will 
+#		specify the IP addresses which the other side will accept.
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"   methodid=31 MADDR="localhost" MPORT=7000 MTID=mt0 CONFIG="defaultroute noauth debug nodetach"
+	assign sid0=RESULT
+runcmd svcid=7 svchost="penpdsn" methodid=31 MADDR="localhost" MPORT=7000 MTID=mt1 CONFIG="defaultroute noauth 192.168.200.20:192.168.200.10 debug nodetach"
+	assign sid1=RESULT
+
+
+#######################################################################################
+#
+# PPP:	Wait for the session to become established
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"	 methodid=7 SID=sid0
+	waitfor SESSION_STATUS=2
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn" methodid=7 SID=sid1
+	waitfor SESSION_STATUS=2
+	check RESULT=0
+runcmd svcid=7 svchost="penmn"	 methodid=7 SID=sid0
+runcmd svcid=7 svchost="penpdsn" methodid=7 SID=sid1
+
+
+#######################################################################################
+#
+# CONNECTION ESTABLISHED: Now do what you want with the connection
+#
+#######################################################################################
+signal
+waitforsignal
+
+
+#######################################################################################
+#
+# PPP:	Stop the PPP session from the PDSN side and wait for the MN to exit. Retrieve
+#		all logs before removing the objects.
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn" methodid=6 SID=sid1
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn" methodid=8 SID=sid1
+runcmd svcid=7 svchost="penpdsn" methodid=32 SID=sid1
+	check RESULT=0
+
+runcmd svcid=7 svchost="penmn"	methodid=7 SID=sid0
+	waitfor SESSION_PROCESS_STATUS=3
+	check RESULT=0
+	check SESSION_STATUS=4
+runcmd svcid=7 svchost="penmn" methodid=8 SID=sid0
+runcmd svcid=7 svchost="penmn" methodid=32 SID=sid0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# MOBSTER: Remove the mobster devices, they should already have stopped
+#
+#######################################################################################
+runcmd svcid=5  svchost="penmn"		methodid=6 DEVICEID=mt0
+	check RESULT=0
+runcmd svcid=5  svchost="penmn"		methodid=7 DEVICEID=mt0
+	check RESULT=0
+
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=mt1
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=mt1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# DONE
+#
+#######################################################################################
+rendezvous

@@ -1,0 +1,82 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE 100£º
+#     Standard PPP session from SymbianOS device to the Test Network.
+#
+
+
+#######################################################################################
+#
+# MOBSTER:  Create a mobster device on the MN and the PDSN and link them together
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt1=RESULT
+
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=mt0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=mt1
+	assign local_uu_port1=AIR_INPORT
+runcmd svcid=5 svchost="penmn" methodid=10 DEVICEID=mt0 REMOTE_ADDRESS="192.169.10.11" REMOTE_PORT=local_uu_port1
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn" methodid=10 DEVICEID=mt1 REMOTE_ADDRESS="10.22.1.6" REMOTE_PORT=local_uu_port0
+	check RESULT=0
+
+showenvironment
+
+
+#######################################################################################
+#
+# PPP:	Create a PPP session on the PDSN
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn" methodid=31 MADDR="localhost" MPORT=7000 MTID=mt1 CONFIG="defaultroute noauth 192.168.200.20:192.168.200.10 debug nodetach"
+	assign sid1=RESULT
+
+
+#######################################################################################
+#
+# Signal the device that we are waiting for a connection, and wait for the 
+# connection to be made.
+#
+#######################################################################################
+signal
+runcmd svcid=7 svchost="penpdsn" methodid=7 SID=sid1
+	waitfor SESSION_STATUS=2
+
+
+#######################################################################################
+#
+# Wait for a signal from the device to close the connection
+#
+#######################################################################################
+waitforsignal
+
+runcmd svcid=7 svchost="penpdsn" methodid=6 SID=sid1
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn" methodid=8 SID=sid1
+runcmd svcid=7 svchost="penpdsn" methodid=32 SID=sid1
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=mt1
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=mt1
+
+
+#######################################################################################
+#
+# Synchronise with the device to end the use-case
+#
+#######################################################################################
+rendezvous

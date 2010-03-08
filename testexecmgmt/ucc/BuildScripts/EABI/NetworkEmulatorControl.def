@@ -1,0 +1,35 @@
+EXPORTS
+	_ZN12CSetUpCommDb10initialiseEv @ 1 NONAME
+	_ZN12CSetUpCommDb11getIntEntryE7TPtrC16mS0_RmPi @ 2 NONAME
+	_ZN12CSetUpCommDb11updateEntryE7TPtrC16mS0_PcPi @ 3 NONAME
+	_ZN12CSetUpCommDb12getBoolEntryE7TPtrC16mS0_RiPi @ 4 NONAME
+	_ZN12CSetUpCommDb13getAsciiEntryE7TPtrC16mS0_R5TDes8Pi @ 5 NONAME
+	_ZN12CSetUpCommDb15getUnicodeEntryE7TPtrC16mS0_R6TDes16Pi @ 6 NONAME
+	_ZN12CSetUpCommDbC1Ev @ 7 NONAME
+	_ZN12CSetUpCommDbC2Ev @ 8 NONAME
+	_ZN12CSetUpCommDbD0Ev @ 9 NONAME
+	_ZN12CSetUpCommDbD1Ev @ 10 NONAME
+	_ZN12CSetUpCommDbD2Ev @ 11 NONAME
+	_ZN18CUCCSDeviceControl10endUseCaseEjjPi @ 12 NONAME
+	_ZN18CUCCSDeviceControl10rendezvousEjPi @ 13 NONAME
+	_ZN18CUCCSDeviceControl11runCommandLEPcPi @ 14 NONAME
+	_ZN18CUCCSDeviceControl12startUseCaseEjPi @ 15 NONAME
+	_ZN18CUCCSDeviceControl15getVariableNameEPcS0_iPi @ 16 NONAME
+	_ZN18CUCCSDeviceControl3NewEv @ 17 NONAME
+	_ZN18CUCCSDeviceControl6signalEjPi @ 18 NONAME
+	_ZN18CUCCSDeviceControl7waitforEjPi @ 19 NONAME
+	_ZN18CUCCSDeviceControl8connectLEP7TDesC1612TDPTransport @ 20 NONAME
+	_ZN18CUCCSDeviceControlD0Ev @ 21 NONAME
+	_ZN18CUCCSDeviceControlD1Ev @ 22 NONAME
+	_ZN18CUCCSDeviceControlD2Ev @ 23 NONAME
+	_ZTI12CSetUpCommDb @ 24 NONAME ; #<TI>#
+	_ZTI13CTCPTransport @ 25 NONAME ; #<TI>#
+	_ZTI16CSerialTransport @ 26 NONAME ; #<TI>#
+	_ZTI18CUCCSDeviceControl @ 27 NONAME ; #<TI>#
+	_ZTI19CUCCSDeviceProtocol @ 28 NONAME ; #<TI>#
+	_ZTV12CSetUpCommDb @ 29 NONAME ; #<VT>#
+	_ZTV13CTCPTransport @ 30 NONAME ; #<VT>#
+	_ZTV16CSerialTransport @ 31 NONAME ; #<VT>#
+	_ZTV18CUCCSDeviceControl @ 32 NONAME ; #<VT>#
+	_ZTV19CUCCSDeviceProtocol @ 33 NONAME ; #<VT>#
+

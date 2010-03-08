@@ -1,0 +1,80 @@
+
+ --**-- Quick reference guide for UCCS Commands (more for programmers) --**--
+
+
+(2) UC_QUIT
+
+Stops the script thread. It sets a flag which prevents the remote control from 
+waiting on the rendezvous semaphore again (since it will block forever) and
+signals the rendezvous semaphore to release it if that's where it is now. This
+does not stop the use-case -- it will keep running until the device side runs
+end use case. 
+
+
+(3) UC_RUNCMD
+
+Runs the command. Does lots of stuff.
+
+
+(4) UC_ASSIGN
+
+Adds the specified elements to the environment object. This is then used by the
+parser in future commands.
+
+
+(5) UC_WAITFOR
+
+Waits for fields of the last reply to be at a certain value. It checks the value
+of the fields, and if they are not equal then it goes back to the last runcmd
+and runs all subsequent commands.
+
+FIXME: need to check what happens if there haven't been any runcmd's yet -- both
+in the case that this is the first command, and when this is not the first but
+the previous are all non-runcmd
+
+
+(6) UC_WAITFORSIGNAL
+
+Waits for a signal from the device
+
+
+(7) UC_RENDEZVOUS
+
+Rendezvous with the device
+
+
+(8) UC_REQUIRE
+
+Require a field to be a particular value. If the field is not correct then this is equivalent
+to a quit command.
+
+
+(9)	UC_REQUIRENOT
+
+Same as above however the logical not
+
+
+(10) UC_CHECK
+
+Checks that a field is a particular value. It differs from require in that if the condition
+is not met, the script continues to run, however, a warning is output.
+
+
+(11) UC_CHECKNOT
+
+Logical not of the above operation.
+
+
+(12) UC_PRINTENVIRONMENT
+
+Prints out all the environment variables.
+
+
+(13) UC_WAITFORNOT
+
+Same as waitfor but not.
+
+
+(14) UC_SIGNAL
+
+Signal to device.

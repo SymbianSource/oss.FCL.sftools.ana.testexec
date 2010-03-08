@@ -1,0 +1,44 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+
+PRINT Synchronised test cases
+
+LOAD_SUITE SampleServer
+
+START_SYNCHRONISED_TESTCASE TestOne
+PRINT TestOne Sycnhronsised Test block
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+END_SYNCHRONISED_TESTCASE TestOne
+
+START_SYNCHRONISED_TESTCASE TestTwo
+PRINT TestTwo Sycnhronsised Test block
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+END_SYNCHRONISED_TESTCASE TestTwo
+
+START_SYNCHRONISED_TESTCASE TestThree
+PRINT TestThree Sycnhronsised Test block
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+END_SYNCHRONISED_TESTCASE TestThree
+
+START_SYNCHRONISED_TESTCASE TestFour
+PRINT TestFour Sycnhronsised Test block
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+RUN_TEST_STEP 100 SampleServer SampleStep2  c:\ucc\sampleTest.ini SectionOne
+END_SYNCHRONISED_TESTCASE TestFour
+

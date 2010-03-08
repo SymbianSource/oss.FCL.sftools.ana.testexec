@@ -1,0 +1,136 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-3: Mobile IP session with dropped packets
+#   NOT UP-TO-DATE
+#   Setup a Mobile IP session. Configure NISTNET to drop 15% of packets
+# on the channel.
+#
+
+#######################################################################################
+#
+# Create an MT on the PDSN and the MN
+#
+#######################################################################################
+runcmd svcid=4 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=192.168.10.11 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+runcmd svcid=5 methodid=3 CHANNEL_TYPE=1 CHANNEL_ADDR=localhost CHANNEL_PORT=4000 AIR_OUTADDR=10.22.1.4 AIR_OUTPORT=5000 AIR_INPORT=5000 DATALINKCONFIG=1 FILTERCONFIG=1
+
+
+#######################################################################################
+#
+# Create a PPP session on the MN and PDSN
+#
+#######################################################################################
+runcmd svcid=11 methodid=3 MADDR=localhost MPORT=4000 CONFIG="defaultroute noauth 192.168.100.10:192.168.100.20 debug logfile ./ppp.log nodetach"
+runcmd svcid=8 methodid=3 MADDR=localhost MPORT=4000 CONFIG="noauth 192.168.100.20:192.168.100.10 debug logfile ./ppp.log nodetach"
+
+
+#######################################################################################
+#
+# The PPP session should now be setup. Use this wait to verify that the PPP session is
+# up and working as expected.
+#
+#######################################################################################
+runcmd svcid=10 methodid=1 PERIOD=4000
+
+
+#######################################################################################
+#
+# Start the home agent and the foreign agent running, wait a bit, then start the mobile 
+# node. We then give some time for the channel to setup a connection before we drop the
+# QoS of the channel
+#
+#######################################################################################
+runcmd svcid=1   methodid=3
+runcmd svcid=2   methodid=3
+runcmd svcid=10  methodid=1 PERIOD=2000
+runcmd svcid=3	 methodid=3
+runcmd svcid=10  methodid=1 PERIOD=2000
+
+
+#######################################################################################
+#
+# Configure NISTNET to drop udp echo packets from the mn to the target server
+#
+#######################################################################################
+#runcmd svcid=6 methodid=2 SRC=10.22.1.4:5000.udp DST=192.168.10.11:5000.udp DROPI=15
+
+
+#######################################################################################
+#
+# Verify that a mobile IP connection is done and play
+#
+#######################################################################################
+rendezvous
+rendezvous
+
+
+#######################################################################################
+#
+# Configure NISTNET to drop udp echo packets from the mn to the target server
+#
+#######################################################################################
+runcmd svcid=6 methodid=2 SRC=10.22.1.4:5000.udp DST=192.168.10.11:5000.udp DROPI=0
+
+
+#######################################################################################
+#
+# Stop the MA, FA, HA
+#
+#######################################################################################
+runcmd svcid=3 methodid=4
+runcmd svcid=1 methodid=4
+runcmd svcid=2 methodid=4
+
+
+#######################################################################################
+#
+# Cleanup the PPP session (MN and PDSN) (hardcode session ID as zero) retrieving all the logs
+#
+#######################################################################################
+runcmd svcid=11 methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=11 methodid=6 SID=0
+
+runcmd svcid=8  methodid=4 SID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=8  methodid=6 SID=0
+
+
+
+#######################################################################################
+#
+# Cleanup mobster -- retrieving the logs (MN and PDSN)
+#
+#######################################################################################
+runcmd svcid=4  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=4  methodid=7 DEVICEID=0
+
+runcmd svcid=5  methodid=6 DEVICEID=0
+runcmd svcid=10 methodid=1 PERIOD=1000
+runcmd svcid=5  methodid=7 DEVICEID=0
+
+
+#######################################################################################
+#
+# We should be back to our original state now -- quit
+#
+#######################################################################################
+rendezvous
+
+
+
+
+

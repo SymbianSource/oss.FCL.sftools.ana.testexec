@@ -1,0 +1,195 @@
+#
+# Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+#   USE-CASE-2: Standard MIP session.
+#   UP-TO-DATE
+#   (1)	Setup a PPP session between the MN and the PDSN. The PDSN will attach the session
+#	to the 192.168.220.x network, which does NOT have appropriate routes setup 
+#	throughout the inter-network. 
+#   (2)	Start the home and foreign agents.
+#   (3)	Start the mobile agent and wait for it to establish a MIP session.
+#   (4)	Wait for a signal to bring things down.
+#   (5) Bring everything down. The PPP session will be brought down as in use-case 1. 
+#
+
+
+
+#######################################################################################
+#
+# MOBSTER:  Create an MT on the MN and the PDSN and link them to each other. Packetise
+#			PPP frames before sending them over the network.
+#
+#######################################################################################
+runcmd svcid=5 svchost="penmn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt0=RESULT
+runcmd svcid=5 svchost="penpdsn" methodid=3 DATALINKCONFIG=2 FILTERCONFIG=0
+	assign mt1=RESULT
+runcmd svcid=9 svchost="localhost" methodid=1 PERIOD=2000
+
+runcmd svcid=5 svchost="penmn" methodid=4 DEVICEID=mt0
+	assign local_uu_port0=AIR_INPORT
+runcmd svcid=5 svchost="penpdsn" methodid=4 DEVICEID=mt1
+	assign local_uu_port1=AIR_INPORT
+runcmd svcid=5 svchost="penmn" methodid=10 DEVICEID=mt0 REMOTE_ADDRESS="192.169.10.11" REMOTE_PORT=local_uu_port1
+	check RESULT=0
+runcmd svcid=5 svchost="penpdsn" methodid=10 DEVICEID=mt1 REMOTE_ADDRESS="10.22.1.6" REMOTE_PORT=local_uu_port0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# PPP:	Create a session on each machine using the new MTs. The PDSN session will 
+#		specify the IP addresses which the other side will accept.
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"   methodid=31 MADDR="localhost" MPORT=7000 MTID=mt0 CONFIG="defaultroute noauth debug nodetach"
+	assign sid0=RESULT
+runcmd svcid=7 svchost="penpdsn" methodid=31 MADDR="localhost" MPORT=7000 MTID=mt1 CONFIG="defaultroute noauth 192.168.211.20:192.168.211.10 debug nodetach"
+	assign sid1=RESULT
+
+
+#######################################################################################
+#
+# PPP:	Wait for the session to become established
+#
+#######################################################################################
+runcmd svcid=7 svchost="penmn"	 methodid=7 SID=sid0
+	waitfor SESSION_STATUS=2
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn"	 methodid=7 SID=sid1
+	waitfor SESSION_STATUS=2
+	check RESULT=0
+
+
+#######################################################################################
+#
+# PPP:	Retrieve the interface of the PDSN ppp session
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn"	 methodid=7 SID=sid1
+	assign pdsn_ppp_interface0=SESSION_INTERFACE_NAME
+
+
+#######################################################################################
+#
+# HOME/FOREIGN AGENT: Create a HA/FA session and start the agent
+#
+#######################################################################################
+runcmd svcid=2 svchost="penha" methodid=31
+	assign ha0=RESULT
+runcmd svcid=2 svchost="penha" methodid=3 AGENTID=ha0
+	check RESULT=0
+runcmd svcid=2 svchost="penha" methodid=9 AGENTID=ha0
+	assign home_agent_address0=STATUS_HOME_AGENT_ADDRESS
+	assign home_address0=VIRTUAL_NETWORK_ADDRESS_0
+	check RESULT=0
+
+runcmd svcid=3 svchost="penpdsn" methodid=31
+	assign fa0=RESULT
+runcmd svcid=3 svchost="penpdsn" methodid=3 AGENTID=fa0 INTERFACE=pdsn_ppp_interface0 SOLICITATIONMODE=0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# MOBILE NODE AGENT: Create a mip session - set the home address - start the agent
+#
+#######################################################################################
+runcmd svcid=4 svchost="penmn" methodid=31
+	assign mn0=RESULT
+runcmd svcid=4 svchost="penmn" methodid=23 AGENTID=mn0 HOME_ADDRESS=home_address0 HOME_ADDRESS_PREFIX=24 HOME_AGENT_ADDRESS=home_agent_address0 INTERFACE=pdsn_ppp_interface0
+	check RESULT=0
+runcmd svcid=4 svchost="penmn" methodid=3 AGENTID=mn0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# CONNECTION ESTABLISHED: Now do what you want with the connection
+#
+#######################################################################################
+signal
+waitforsignal
+
+
+#######################################################################################
+#
+# MOBILE NODE AGENT: Stop the agent and cleanup the session
+#
+#######################################################################################
+runcmd svcid=4 svchost="penmn" methodid=4 AGENTID=mn0
+	check RESULT=0
+runcmd svcid=4 svchost="penmn" methodid=32 AGENTID=mn0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# HOME/FOREIGN AGENT: Stop the agent and cleanup the session
+#
+#######################################################################################
+runcmd svcid=2 svchost="penha" methodid=4 AGENTID=ha0
+	check RESULT=0
+runcmd svcid=2 svchost="penha" methodid=32 AGENTID=ha0
+	check RESULT=0
+
+runcmd svcid=3 svchost="penpdsn" methodid=4 AGENTID=fa0
+	check RESULT=0
+runcmd svcid=3 svchost="penpdsn" methodid=32 AGENTID=fa0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# PPP:	Stop the PPP session from the PDSN side and wait for the MN to exit. Retrieve
+#		all logs before removing the objects.
+#
+#######################################################################################
+runcmd svcid=7 svchost="penpdsn" methodid=6 SID=sid1
+	check RESULT=0
+runcmd svcid=7 svchost="penpdsn" methodid=8 SID=sid1
+runcmd svcid=7 svchost="penpdsn" methodid=32 SID=sid1
+	check RESULT=0
+
+runcmd svcid=7 svchost="penmn"	methodid=7 SID=sid0
+	waitfor SESSION_PROCESS_STATUS=3
+	check RESULT=0
+	check SESSION_STATUS=4
+runcmd svcid=7 svchost="penmn" methodid=8 SID=sid0
+runcmd svcid=7 svchost="penmn" methodid=32 SID=sid0
+	check RESULT=0
+
+
+#######################################################################################
+#
+# MOBSTER: Remove the mobster devices, they should already have stopped
+#
+#######################################################################################
+runcmd svcid=5  svchost="penmn"		methodid=6 DEVICEID=mt0
+	check RESULT=0
+runcmd svcid=5  svchost="penmn"		methodid=7 DEVICEID=mt0
+	check RESULT=0
+
+runcmd svcid=5  svchost="penpdsn"	methodid=6 DEVICEID=mt1
+	check RESULT=0
+runcmd svcid=5  svchost="penpdsn"	methodid=7 DEVICEID=mt1
+	check RESULT=0
+
+
+#######################################################################################
+#
+# DONE
+#
+#######################################################################################
+rendezvous
